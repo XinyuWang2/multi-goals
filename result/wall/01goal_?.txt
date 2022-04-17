@@ -1,0 +1,10 @@
+when reward is -1 100
+FourRooms N
+Cross Y
+Spiral5x5 R1-Y R2-Y
+Spiral7x7 R1-N R2-N 
+
+when reward is 0 1
+Spiral5x5 R1-Y (150k: training gets almost stuck at the beginning, then it jumps out of suboptimal)
+Spiral7x7 R1-N 
+This implies setting reward to be 0 for not reaching terminal state is even harder!

@@ -1,0 +1,58 @@
+04/09:
+1, Find several training results: 
+    training so many times, and loss stays very small for a while but agent can't reach goal testing
+    traing much less time, when we find mean reward are hundreds, that could be a good policy already 
+2, Complete multiple goals rendering
+3, Train a goal conditioned env with SB3 PPO 100000 iters, and get rubbish
+
+04/10:
+TODO:
+1, Change obs space to be gym.space.MultiDiscrete
+    Can solve Cross, Spiral5x5. 
+    Can't solve FourRooms, Spiral7x7
+    Failed training result: Agent moves only one step or never, then keep hiting the obstacle
+
+2, Change reward of hitting an obstacle from -1 to -2. In this case, the agent should tend to go to free space instead of obstacle
+    Test Spiral7x7, it also fails.
+    Failed training result: In most of the ten experiments, agent ends up moving back and forth (it may walk 2~5 steps in the beginning).
+    This happen even when the start state is very close to the goal state 
+
+# Looks like online policy is not enough
+3, Make env from gym.GoalEnv. This includes change observation and observation_space 
+4, Not sure if the environment is fully correct. Because computer_reward can be called with np.ndarray of 
+   achieved_goal and goal (by SB3 or by HER, outside of step())
+   Have asked about this in SB3 github issue: https://github.com/DLR-RM/stable-baselines3/issues/854
+5, Run SB3 - DQN+HER, can't even work with "Small", where no obstacles exist.
+
+
+04/11
+1, SB3 github answered this quesiton, np.ndarray because:
+"They are assuming this function to be vectorized, so it can be called with single goal or batch of goals (ndarray)."
+
+2, For np.ndarray case, change reward from sum of reward for corresponding pairs to np.array.
+Now, it can sometimes reach goal for env "Small"
+
+Learn how to plot training (maybe I care about episode length more) Then we can see if there is any difference for reward being 1,10,100
+maybe we need to implement our own experience replay buffer??
+
+
+04/15
+1, Combine HER and DDPG and TD3
+2, In the above two tests, robots always have its movement fixed, whatever the goal is
+
+04/16
+1, Finish bug problem described above
+Try a simple TD3(with primitive buffer) with state as combined-No noticeable progress when training
+But using SB3, ddpg+her ortd3+her both improved steadily
+I guess there is no big problem with the implemented DDPG, TD3, HER.
+I need to improve the training procedure, including changing some parameters (take SB3 as reference)  #TODO!!!!!
+
+2, Complete continuous wall env
+3, Train continuous wall env with SB3. Using HER, DDPG and TD3 don't work well, but SAC work well.
+   Small: 1.2e4 timesteps: 96+% success rate
+   Cross: 1.5e4 timesteps: 60-70% success rate 
+   Spiral5x5: 3.7e4 timesteps: 40-50% success rate
+
+TODO:
+Incoporate PPo in algo
+start imitation learing

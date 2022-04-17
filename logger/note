@@ -1,0 +1,5 @@
+1, gym.spaces.Discrete(4): 0, 1, 2, 3, test it with space.sample()
+
+
+Step1: goal fixed
+Step2: cat state and goal

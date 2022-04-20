@@ -64,11 +64,12 @@ Point is, see if it just stucks or even the direction can be wrong.
 
 2, If it is just a block issue with obstacles, try a simple move away method. See if it can reach goal eventually. 
 Not good enough. 
-I used sac_Cross_*1_con_80000. Maximum timesteps allowed when testing is 20.
-With naive sampling (sampled step is 0.5 * action_space.sample()), succes_rate: 0.799
-With naive sampling (sampled step is 1 * action_space.sample()), succes_rate: 0.808, a slightly improment
+I used sac_Cross_*1_con_100000. Maximum timesteps allowed when testing is 20. 3000 experiments, np.random.seed(0)
 
-Without naive sampling, succes_rate: 0.647
+sample_1, sample_0.3, sample_0.6, unsample 
+0.8833333333333333 0.8666666666666667 0.8166666666666667 0.7183333333333334 (succes_rate)
+5.370242567985266  5.222501261407206 4.996503849704372 4.825832408733381 (mean length)
+
 
 which There are cases the original route given doesn't wire at all.
 

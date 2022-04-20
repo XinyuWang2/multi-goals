@@ -1,5 +1,7 @@
 from stable_baselines3 import HerReplayBuffer, DDPG, DQN, SAC, TD3
 from stable_baselines3.her.goal_selection_strategy import GoalSelectionStrategy
+from stable_baselines3.common.logger import configure
+
 import time
 import gym
 from wall_goalenv_continuous import PointEnv
@@ -14,11 +16,11 @@ RESIZE = 1
 # ENV_NAME = "Spiral5x5"
 # ENV_NAME = "Small"
 ENV_NAME = "Cross"
-TIMESTEPS = int(3e4)
+TIMESTEPS = int(1e5)
 
 model_path = "trained_models/" + "sac_" + ENV_NAME + "_*" + str(RESIZE) + '_con_' + str(TIMESTEPS)
 
-env = PointEnv(ENV_NAME, resize_factor = 1)
+env = PointEnv(ENV_NAME, resize_factor = RESIZE)
 env = gym.wrappers.TimeLimit(env, max_episode_steps=MAX_EPISODE_STEPS) # use gym wrapper
 obs = env.reset()
 
@@ -37,13 +39,19 @@ model = SAC(
     verbose=1,
 )
 
+# # # # # Set up Logger # # # # #
+log_path = "sb3_log/"
+new_logger = configure(log_path, ["stdout", "csv"])
+model.set_logger(new_logger)
+
+# # # # # Train and Save model # # # # #
 model.learn(total_timesteps=TIMESTEPS)
 model.save(model_path)
-model.save_replay_buffer("sac_replay_buffer") # now save the replay buffer too
+# model.save_replay_buffer("sac_replay_buffer") # now save the replay buffer too
 
-# load it into the loaded_model
-# loaded_model = SAC.load(model_path, env=env)
-# loaded_model.load_replay_buffer("sac_replay_buffer")
+# # # # # Load model # # # # #
+# model = SAC.load(model_path, env=env)
+# model.load_replay_buffer("sac_replay_buffer")
 # model.learn(total_timesteps=int(2e4))
 
 
@@ -59,9 +67,10 @@ for i in range(10):
 		action, _state = model.predict(obs, deterministic=True)
 		obs, reward, done, info = env.step(action)
 		env.render()
+		time.sleep(0.3)
 		if done:
 			print(info)
 			# time.sleep(0.3)
 			break
-	
+	# time.sleep(1)
 	print("")

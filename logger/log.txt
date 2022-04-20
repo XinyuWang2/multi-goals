@@ -60,8 +60,17 @@ start imitation learing
 TODO:
 1, Take a look at trained model for complex task. And maybe train "fouroom", both GoalEnv and multigoals.
 Point is, see if it just stucks or even the direction can be wrong.
+- It learns the direction well. I tested on "Cross" and it can follow a curve to reach goal. And of course, sometiems stuck with obstacles
 
 2, If it is just a block issue with obstacles, try a simple move away method. See if it can reach goal eventually. 
+Not good enough. 
+I used sac_Cross_*1_con_80000. Maximum timesteps allowed when testing is 20.
+With naive sampling (sampled step is 0.5 * action_space.sample()), succes_rate: 0.799
+With naive sampling (sampled step is 1 * action_space.sample()), succes_rate: 0.808, a slightly improment
+
+Without naive sampling, succes_rate: 0.647
+
+which There are cases the original route given doesn't wire at all.
 
 3, Incorporate RRT sampling tree method, to help exploration. Take Return first then explore as reference.
 A simple idea is contrary SoRB, which treats experience as graph. We can building rrt tree ahead, use that as goal or something then run RL.

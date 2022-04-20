@@ -53,6 +53,15 @@ I need to improve the training procedure, including changing some parameters (ta
    Cross: 1.5e4 timesteps: 60-70% success rate 
    Spiral5x5: 3.7e4 timesteps: 40-50% success rate
 
-TODO:
-Incoporate PPo in algo
+
+Incoporate PPO in algo
 start imitation learing
+
+TODO:
+1, Take a look at trained model for complex task. And maybe train "fouroom", both GoalEnv and multigoals.
+Point is, see if it just stucks or even the direction can be wrong.
+
+2, If it is just a block issue with obstacles, try a simple move away method. See if it can reach goal eventually. 
+
+3, Incorporate RRT sampling tree method, to help exploration. Take Return first then explore as reference.
+A simple idea is contrary SoRB, which treats experience as graph. We can building rrt tree ahead, use that as goal or something then run RL.

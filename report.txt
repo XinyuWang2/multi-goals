@@ -1,0 +1,28 @@
+tasks that require reasoning over long horizons with limited feedback and high-dimensional
+observations remain exceedingly challenging for both planning and reinforcement
+
+
+1, We need to scale dimensions so show usefulness
+
+
+2, Maybe we can also do this: 
+	decompose the task of reaching a distant goal state into a sequence of easier tasks, 
+	each of which corresponds to reaching a particular subgoal.	
+because with a trained model, we can really reach the goal when it is close
+
+SORB: build graph
+
+
+Our main insight is that this graph can be constructed via reinforcement learning, 
+where a goal-conditioned value function provides edge weights, and nodes are taken to be previously seen observations in a replay buffer.
+
+Info:
+Goal-conditioned RL often fails to reach distant goals, but can successfully reach the goal if starting nearby (inside the green region).
+
+
+Main Goal:
+Finish a version with sampling (Maybe we don't need tree at all)
+
+Implement an A*
+
+Reference SORB, solve "fourroom"!

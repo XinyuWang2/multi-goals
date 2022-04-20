@@ -53,6 +53,16 @@ I need to improve the training procedure, including changing some parameters (ta
    Cross: 1.5e4 timesteps: 60-70% success rate 
    Spiral5x5: 3.7e4 timesteps: 40-50% success rate
 
+04/17
+1, Start imitation learing: use discrete 1 goal env first
+Just do self-supervise learning, collect all data and then train
+Get almost zero loss for "Small" and running the trained model 10 times, 100% success rate
+
 TODO:
-Incoporate PPo in algo
-start imitation learing
+Two ways: 
+1) A much bigger discrete env using PPO
+2) Regular continous env:
+    Use trained model SAC+HER with continuous
+    Change network for continous state and action
+
+Incoporate PPO in algo

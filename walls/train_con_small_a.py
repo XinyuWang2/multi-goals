@@ -1,22 +1,18 @@
+from wall_goalenv_con_small_a import PointEnv
 from stable_baselines3 import HerReplayBuffer, DDPG, DQN, SAC, TD3
 from stable_baselines3.her.goal_selection_strategy import GoalSelectionStrategy
 import time
 import gym
-from wall_goalenv_continuous import PointEnv
-
-# Usually the cause of failed task is both loss are so small while ep_len still big,
-# thus training gets stuck and episode length and reward don't change
 
 
 MAX_EPISODE_STEPS = 100
 RESIZE = 1
 # ENV_NAME = "Spiral7x7"
 # ENV_NAME = "Spiral5x5"
-# ENV_NAME = "Small"
 ENV_NAME = "Simple"
-TIMESTEPS = int(6e4)
+TIMESTEPS = int(8e4)
 
-model_path = "trained_models/" + "sac_" + ENV_NAME + "_*" + str(RESIZE) + '_con_' + str(TIMESTEPS)
+model_path = "trained_models/" + "sac_" + ENV_NAME + "_*" + str(RESIZE) + '_con_small_a' + str(TIMESTEPS)
 
 env = PointEnv(ENV_NAME, resize_factor=RESIZE)
 env = gym.wrappers.TimeLimit(env, max_episode_steps=MAX_EPISODE_STEPS) # use gym wrapper
@@ -39,28 +35,24 @@ model = SAC(
 
 # model.learn(total_timesteps=TIMESTEPS)
 # model.save(model_path)
-# model.save_replay_buffer("sac_replay_buffer") # now save the replay buffer too
 
-# load it into the loaded_model
-loaded_model = SAC.load("../trained_models/sac_Simple_*1_con_60000", env=env)
-# loaded_model.load_replay_buffer("sac_replay_buffer")
+model_path = "trained_models/sac_Simple_*1_con_small_a80000_0.85"
+model = SAC.load(model_path, env=env)
 
 
 obs = env.reset()
 env.render()
-
 for i in range(10):
+	print("episode", i, end=" ")
 	done = False
 	obs = env.reset()
-	print("episode", i, end="")
 	# while not done:
-	for i in range(10):
+	for i in range(50):
 		action, _state = model.predict(obs, deterministic=True)
 		obs, reward, done, info = env.step(action)
 		env.render()
+		time.sleep(0.1)
 		if done:
 			print(info)
-			# time.sleep(0.3)
 			break
-	time.sleep(0.5)
 	print("")

@@ -39,8 +39,8 @@ class PointEnv(gym.GoalEnv):
 		self.reward_type = reward_type
 
 		self.action_space = gym.spaces.Box(
-			low=np.array([-1.0, -1.0]),
-			high=np.array([1.0, 1.0]),
+			low=np.array([-0.2, -0.2]),
+			high=np.array([0.2, 0.2]),
 			dtype=np.float32) # action is continuous!
 
 		self.observation_space = gym.spaces.Dict(
@@ -76,10 +76,6 @@ class PointEnv(gym.GoalEnv):
 	def reset(self):
 		self._state = self._sample_empty_state()
 		self._goal = self._sample_empty_state()
-
-		assert not self._is_collide(self._state)
-		assert not self._is_collide(self._goal)
-
 		obs = self._get_obs()
 		return obs
 
@@ -104,17 +100,12 @@ class PointEnv(gym.GoalEnv):
 		num_substeps = 10 # hyperparameter to break the action into steps
 		step = action / num_substeps
 		new_state = self._state.copy()
-
-		assert not self._is_collide(new_state)
-
 		for _ in range(num_substeps):
 			new_state += step
 			if self._is_collide(new_state):
 				new_state -= step
 				break
 		self._state = new_state
-
-		assert not self._is_collide(new_state)
 
 		done = goal_distance(self._state, self._goal) < self.distance_threshold
 		obs = self._get_obs()
@@ -167,11 +158,6 @@ class PointEnv(gym.GoalEnv):
 			for y in range(self._height):
 				for x in range(self._width):
 					# four vertices of a square block
-					# l = x * u_size + m
-					# r = (x + 1) * u_size + m
-					# t = (self._height - y) * u_size + m
-					# b = (self._height - y - 1) * u_size + m
-					# v = [(l, b), (l, t), (r, t), (r, b)]
 					v = [(x * u_size + m, y * u_size + m),
 						((x + 1 ) * u_size - m, y * u_size + m),
 						((x + 1) * u_size - m, (y + 1) * u_size - m),
@@ -222,3 +208,5 @@ if __name__ == '__main__':
 	from stable_baselines3.common.env_checker import check_env
 	env = PointEnv("FourRooms")
 	# check_env(env, warn=True)
+	for i in range(30):
+		env.reset()

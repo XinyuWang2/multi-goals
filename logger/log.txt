@@ -65,3 +65,5 @@ Point is, see if it just stucks or even the direction can be wrong.
 
 3, Incorporate RRT sampling tree method, to help exploration. Take Return first then explore as reference.
 A simple idea is contrary SoRB, which treats experience as graph. We can building rrt tree ahead, use that as goal or something then run RL.
+
+(Maybe take a look at env_wrapper, about how they reset initial state and goal or something)

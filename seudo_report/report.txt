@@ -1,0 +1,8 @@
+
+
+Baseline:
+The next state for A* should be got from env.step()
+Therefore, we can add noise into it, thus making environment stochastic.
+
+Evaluate: 
+symetric: exchange initial state and goal state, check if success rate are similar

@@ -76,4 +76,21 @@ which There are cases the original route given doesn't wire at all.
 3, Incorporate RRT sampling tree method, to help exploration. Take Return first then explore as reference.
 A simple idea is contrary SoRB, which treats experience as graph. We can building rrt tree ahead, use that as goal or something then run RL.
 
-(Maybe take a look at env_wrapper, about how they reset initial state and goal or something)
+- First, I think in training, it is definetely a graph, rather than a tree.
+Maybe we can first explore in a tree manner, and treat this as replay and try to connect 
+
+
+1) A mechanism to pick state from graph and explore from it
+
+Review of the traditional off policy:
+    The only purpose is to rollout and collect transitions in the buffer. And these transitions are later fed into network for training.
+    During rollout, there is action_noise to gaurantee some exploration. But for long distance task, ???
+
+    The idea of Return first then explore, state is kept in archive, return to state visited before. So here state is obs+goal.
+    But Atari is not goal conditioned task. The state we return is indeed the observation, which doesn't include goal. 
+    Policy-based Go-Explore means we use that observation as our goal and move to it (do the rollout).
+
+    So we can build graph for rollout (fixed initial state and goal state)? 
+    No No. We don't have the dynamic model. What we can do is just manually set current state and goal state
+
+    
